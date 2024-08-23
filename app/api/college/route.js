@@ -51,3 +51,58 @@ export async function POST(request) {
     }
 }
 
+export async function PUT(request) {
+    try {
+        await connectMongo();
+
+        const body = await request.json();
+        const { oldCollegeName, newCollegeName } = body;
+
+        if (!oldCollegeName || !newCollegeName) {
+            return NextResponse.json({ error: 'Both old and new college names are required' }, { status: 400 });
+        }
+
+        const newCollegeCode = generateCollegeCode(newCollegeName);
+
+        const updatedCollege = await College.findOneAndUpdate(
+            { collegeName: oldCollegeName },
+            { collegeName: newCollegeName, collegeCode: newCollegeCode },
+            { new: true }
+        );
+
+        if (!updatedCollege) {
+            return NextResponse.json({ error: 'College not found' }, { status: 404 });
+        }
+
+        return NextResponse.json(updatedCollege, { status: 200 });
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    }
+}
+
+export async function DELETE(request) {
+    try {
+        await connectMongo();
+
+        const body = await request.json();
+        const { collegeName, collegeCode } = body;
+
+        if (!collegeName && !collegeCode) {
+            return NextResponse.json({ error: 'College name or code is required' }, { status: 400 });
+        }
+
+        const query = collegeName ? { collegeName } : { collegeCode };
+
+        const deletedCollege = await College.findOneAndDelete(query);
+
+        if (!deletedCollege) {
+            return NextResponse.json({ error: 'College not found' }, { status: 404 });
+        }
+
+        return NextResponse.json({ message: 'College deleted successfully' }, { status: 200 });
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    }
+}
