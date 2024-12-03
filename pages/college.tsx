@@ -104,29 +104,9 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
     return (
         <div className='flex flex-col items-center justify-center py-24'>
             <div className='flex flex-col w-10/12 h-full '>
-                <h1>Colleges</h1>
-                <ul className='bg-[#e3e3e3] rounded border border-[#b8b8b8] p-4'>
-                    {collegeList.map((college) => (
-                        <li key={college._id} className='flex justify-between items-center'>
-                            {college.collegeName} ({college.collegeCode})
-                            <div className='flex gap-2'>
-                                <Button
-                                    className='h-8'
-                                    onClick={() => startEditing(college)}
-                                >
-                                    Edit
-                                </Button>
-                                <Button
-                                    className='h-8'
-                                    onClick={() => handleDeleteCollege(college._id)}
-                                >
-                                    Delete
-                                </Button>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-                <div className='flex flex-row gap-2 py-8 w-full h-auto'>
+
+                <h1 className='mb-2 font-semibold'>Add Colleges</h1>
+                <div className='flex flex-row gap-2 pb-8 w-full h-auto'>
                     <Input
                         className='h-10 md:w-9/12 w-full'
                         value={collegeName}
@@ -148,6 +128,30 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
                         </Button>
                     )}
                 </div>
+
+                <h1 className='mb-2 font-semibold'>Colleges</h1>
+                <ul className='bg-[#e3e3e3] rounded border border-[#b8b8b8] p-4 flex flex-col gap-4'>
+                    {collegeList.map((college) => (
+                        <li key={college._id} className='flex flex-row justify-between items-center'>
+
+                            <div className='flex flex-col'>
+                                <span className='capitalize'>{college.collegeName}</span>
+                                <span>({college.collegeCode})</span>
+                            </div>
+
+                            <div className='flex gap-4'>
+                                <button className="text-sm button-56" role="button" onClick={() => startEditing(college)}>
+                                    <span className="text">Edit</span>
+                                </button>
+                                <button className="text-sm button-56" role="button" onClick={() => handleDeleteCollege(college._id)}>
+                                    <span className="text">Delete</span>
+                                </button>
+                            </div>
+
+                        </li>
+                    ))}
+                </ul>
+
             </div>
         </div>
     );
