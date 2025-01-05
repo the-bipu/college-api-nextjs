@@ -26,7 +26,7 @@ const Index = () => {
                     <div className="text-3xl font-bold text-[#333333]">
                         College API Documentation
                     </div>
-                    <p className="text-lg">Welcome to the College API by the-bipu.</p>
+                    <p className="text-lg">Welcome to the College API by the-bipu. Here we've tried to list all the colleges of India with this API.</p>
                 </div>
 
                 <div className="flex flex-col bg-[#fff] p-6 rounded">
@@ -45,6 +45,25 @@ const Index = () => {
                     <p className="text-[#888] font-semibold mb-2">Example Response:</p>
                     <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] flex flex-row gap-4 space-mono">
                         {JSON.stringify(college, null, 2)}
+                    </pre>
+                </div>
+
+                <div className="flex flex-col bg-[#fff] p-6 rounded">
+                    <h3 className="text-[#ff7f50] text-2xl font-bold mb-3">Get Colleges with First Letter.</h3>
+                    <p className="text-[#888] mb-2">
+                        Use this endpoint to retrieve a list of colleges with same starting letter.
+                    </p>
+                    <p className="text-[#888] font-semibold mb-2">Example Request:</p>
+                    <div
+                        className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] flex flex-row gap-4 mb-2"
+                    >
+                        <span className="text-[#228b22]">GET</span>
+                        <span className="space-mono"
+                        >{process.env.NEXT_PUBLIC_BASE_URL}/api/colleges?letter=z</span>
+                    </div>
+                    <p className="text-[#888] font-semibold mb-2">Example Response:</p>
+                    <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] flex flex-row gap-4 space-mono">
+                        {JSON.stringify(collegeList, null, 2)}
                     </pre>
                 </div>
 
