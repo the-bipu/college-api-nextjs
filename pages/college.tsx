@@ -26,7 +26,7 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
         if (!collegeName.trim()) return;
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/college`, {
+            const response = await fetch(`/api/college`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
         if (!collegeName.trim() || !editingCollege) return;
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/college`, {
+            const response = await fetch(`/api/college`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
 
     const handleDeleteCollege = async (collegeId: string) => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/college`, {
+            const response = await fetch(`/api/college`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -130,27 +130,51 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
                 </div>
 
                 <h1 className='mb-2 font-semibold'>Colleges</h1>
-                <ul className='bg-[#e3e3e3] rounded border border-[#b8b8b8] p-4 flex flex-col gap-4'>
-                    {collegeList.map((college) => (
-                        <li key={college._id} className='flex flex-row justify-between items-center'>
+                {collegeList.length > 0 ? (
+                    <ul className='bg-[#e3e3e3] rounded border border-[#b8b8b8] p-4 flex flex-col gap-4'>
+                        {collegeList.map((college) => (
+                            <li key={college._id} className='flex flex-row justify-between items-center'>
 
-                            <div className='flex flex-col'>
-                                <span className='capitalize'>{college.collegeName}</span>
-                                <span>({college.collegeCode})</span>
-                            </div>
+                                <div className='flex flex-col'>
+                                    <span className='capitalize'>{college.collegeName}</span>
+                                    <span>({college.collegeCode})</span>
+                                </div>
 
-                            <div className='flex gap-4'>
-                                <button className="text-sm button-56" role="button" onClick={() => startEditing(college)}>
-                                    <span className="text">Edit</span>
-                                </button>
-                                <button className="text-sm button-56" role="button" onClick={() => handleDeleteCollege(college._id)}>
-                                    <span className="text">Delete</span>
-                                </button>
-                            </div>
+                                <div className='flex gap-4'>
+                                    <button className="text-sm button-56" role="button" onClick={() => startEditing(college)}>
+                                        <span className="text">Edit</span>
+                                    </button>
+                                    <button className="text-sm button-56" role="button" onClick={() => handleDeleteCollege(college._id)}>
+                                        <span className="text">Delete</span>
+                                    </button>
+                                </div>
 
-                        </li>
-                    ))}
-                </ul>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <ul className='bg-[#e3e3e3] rounded border border-[#b8b8b8] p-4 flex flex-col gap-4'>
+                        {dummyList.map((college: any) => (
+                            <li key={college._id} className='flex flex-row justify-between items-center'>
+
+                                <div className='flex flex-col'>
+                                    <span className='capitalize'>{college.collegeName}</span>
+                                    <span>({college.collegeCode})</span>
+                                </div>
+
+                                <div className='flex gap-4'>
+                                    <button className="text-sm button-56" role="button" onClick={() => startEditing(college)}>
+                                        <span className="text">Edit</span>
+                                    </button>
+                                    <button className="text-sm button-56" role="button" onClick={() => handleDeleteCollege(college._id)}>
+                                        <span className="text">Delete</span>
+                                    </button>
+                                </div>
+
+                            </li>
+                        ))}
+                    </ul>
+                )}
 
             </div>
         </div>
@@ -167,3 +191,31 @@ export const getServerSideProps: GetServerSideProps = async () => {
 };
 
 export default College;
+
+const dummyList = [
+    {
+        _id: "clg001",
+        collegeName: "Sant Longowal Institute of Engineering and Technology",
+        collegeCode: "SLIET"
+    },
+    {
+        _id: "clg002",
+        collegeName: "Indian Institute of Technology Delhi",
+        collegeCode: "IITD"
+    },
+    {
+        _id: "clg003",
+        collegeName: "National Institute of Technology Jalandhar",
+        collegeCode: "NITJ"
+    },
+    {
+        _id: "clg004",
+        collegeName: "Lovely Professional University",
+        collegeCode: "LPU"
+    },
+    {
+        _id: "clg005",
+        collegeName: "Thapar Institute of Engineering and Technology",
+        collegeCode: "TIET"
+    }
+];
