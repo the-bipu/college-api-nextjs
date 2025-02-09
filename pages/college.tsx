@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 
 interface CollegeProps {
     _id: string;
@@ -102,82 +103,106 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
     };
 
     return (
-        <div className='flex flex-col items-center justify-center py-24'>
-            <div className='flex flex-col w-10/12 h-full '>
+        <React.Fragment>
+            <Head>
+                <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
+                <title>Manage Colleges - Admin Panel | College API</title>
+                <meta name="description" content="Admin panel for managing Indian colleges database. Add, edit, and delete college entries in the College API database. Comprehensive CRUD operations for educational institutions." />
+                <meta name="keywords" content="College Management, Admin Panel, College Database, Edit Colleges, Add Colleges, Delete Colleges, College API Admin, Database Management, Educational Institutions Management" />
+                <meta name="author" content="the-bipu" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-                <h1 className='mb-2 font-semibold'>Add Colleges</h1>
-                <div className='flex flex-row gap-2 pb-8 w-full h-auto'>
-                    <Input
-                        className='h-10 md:w-9/12 w-full'
-                        value={collegeName}
-                        onChange={handleInputChange}
-                    />
-                    {editingCollege ? (
-                        <Button
-                            className='h-10 md:w-3/12 w-full'
-                            onClick={handleEditCollege}
-                        >
-                            Save
-                        </Button>
+                <meta property="og:type" content="website" />
+                <meta property="og:title" content="Manage Colleges - Admin Panel | College API" />
+                <meta property="og:description" content="Manage and maintain the Indian colleges database. Add new colleges, update existing information, and manage the complete college directory through our admin interface." />
+                <meta property="og:image" content="/logo/og-college-api.png" />
+                <meta property="og:url" content="https://college-api-nextjs.vercel.app/college" />
+                <meta property="og:site_name" content="College API" />
+
+                <meta name="robots" content="noindex, nofollow" />
+                <meta name="language" content="English" />
+                <meta name="theme-color" content="#000000" />
+
+                <link rel="canonical" href="https://college-api-nextjs.vercel.app/college" />
+            </Head>
+
+            <div className='flex flex-col items-center justify-center py-24'>
+                <div className='flex flex-col w-10/12 h-full '>
+
+                    <h1 className='mb-2 font-semibold'>Add Colleges</h1>
+                    <div className='flex flex-row gap-2 pb-8 w-full h-auto'>
+                        <Input
+                            className='h-10 md:w-9/12 w-full'
+                            value={collegeName}
+                            onChange={handleInputChange}
+                        />
+                        {editingCollege ? (
+                            <Button
+                                className='h-10 md:w-3/12 w-full'
+                                onClick={handleEditCollege}
+                            >
+                                Save
+                            </Button>
+                        ) : (
+                            <Button
+                                className='h-10 md:w-3/12 w-full'
+                                onClick={handleAddCollege}
+                            >
+                                Add New
+                            </Button>
+                        )}
+                    </div>
+
+                    <h1 className='mb-2 font-semibold'>Colleges</h1>
+                    {collegeList.length > 0 ? (
+                        <ul className='bg-[#e3e3e3] rounded border border-[#b8b8b8] p-4 flex flex-col gap-4'>
+                            {collegeList.map((college) => (
+                                <li key={college._id} className='flex flex-row justify-between items-center'>
+
+                                    <div className='flex flex-col'>
+                                        <span className='capitalize'>{college.collegeName}</span>
+                                        <span>({college.collegeCode})</span>
+                                    </div>
+
+                                    <div className='flex gap-4'>
+                                        <button className="text-sm button-56" role="button" onClick={() => startEditing(college)}>
+                                            <span className="text">Edit</span>
+                                        </button>
+                                        <button className="text-sm button-56" role="button" onClick={() => handleDeleteCollege(college._id)}>
+                                            <span className="text">Delete</span>
+                                        </button>
+                                    </div>
+
+                                </li>
+                            ))}
+                        </ul>
                     ) : (
-                        <Button
-                            className='h-10 md:w-3/12 w-full'
-                            onClick={handleAddCollege}
-                        >
-                            Add New
-                        </Button>
+                        <ul className='bg-[#e3e3e3] rounded border border-[#b8b8b8] p-4 flex flex-col gap-4'>
+                            {dummyList.map((college: any) => (
+                                <li key={college._id} className='flex flex-row justify-between items-center'>
+
+                                    <div className='flex flex-col'>
+                                        <span className='capitalize'>{college.collegeName}</span>
+                                        <span>({college.collegeCode})</span>
+                                    </div>
+
+                                    <div className='flex gap-4'>
+                                        <button className="text-sm button-56" role="button" onClick={() => startEditing(college)}>
+                                            <span className="text">Edit</span>
+                                        </button>
+                                        <button className="text-sm button-56" role="button" onClick={() => handleDeleteCollege(college._id)}>
+                                            <span className="text">Delete</span>
+                                        </button>
+                                    </div>
+
+                                </li>
+                            ))}
+                        </ul>
                     )}
+
                 </div>
-
-                <h1 className='mb-2 font-semibold'>Colleges</h1>
-                {collegeList.length > 0 ? (
-                    <ul className='bg-[#e3e3e3] rounded border border-[#b8b8b8] p-4 flex flex-col gap-4'>
-                        {collegeList.map((college) => (
-                            <li key={college._id} className='flex flex-row justify-between items-center'>
-
-                                <div className='flex flex-col'>
-                                    <span className='capitalize'>{college.collegeName}</span>
-                                    <span>({college.collegeCode})</span>
-                                </div>
-
-                                <div className='flex gap-4'>
-                                    <button className="text-sm button-56" role="button" onClick={() => startEditing(college)}>
-                                        <span className="text">Edit</span>
-                                    </button>
-                                    <button className="text-sm button-56" role="button" onClick={() => handleDeleteCollege(college._id)}>
-                                        <span className="text">Delete</span>
-                                    </button>
-                                </div>
-
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <ul className='bg-[#e3e3e3] rounded border border-[#b8b8b8] p-4 flex flex-col gap-4'>
-                        {dummyList.map((college: any) => (
-                            <li key={college._id} className='flex flex-row justify-between items-center'>
-
-                                <div className='flex flex-col'>
-                                    <span className='capitalize'>{college.collegeName}</span>
-                                    <span>({college.collegeCode})</span>
-                                </div>
-
-                                <div className='flex gap-4'>
-                                    <button className="text-sm button-56" role="button" onClick={() => startEditing(college)}>
-                                        <span className="text">Edit</span>
-                                    </button>
-                                    <button className="text-sm button-56" role="button" onClick={() => handleDeleteCollege(college._id)}>
-                                        <span className="text">Delete</span>
-                                    </button>
-                                </div>
-
-                            </li>
-                        ))}
-                    </ul>
-                )}
-
             </div>
-        </div>
+        </React.Fragment>
     );
 };
 
