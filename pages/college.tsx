@@ -105,7 +105,7 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
     return (
         <React.Fragment>
             <Head>
-                <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
+                <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
                 <title>Manage Colleges - Admin Panel | College API</title>
                 <meta name="description" content="Admin panel for managing Indian colleges database. Add, edit, and delete college entries in the College API database. Comprehensive CRUD operations for educational institutions." />
                 <meta name="keywords" content="College Management, Admin Panel, College Database, Edit Colleges, Add Colleges, Delete Colleges, College API Admin, Database Management, Educational Institutions Management" />

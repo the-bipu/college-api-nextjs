@@ -23,7 +23,7 @@ const Index = () => {
     return (
         <React.Fragment>
             <Head>
-                <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
+                <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
                 <title>College API - Comprehensive Indian Colleges Database | Next.js REST API</title>
                 <meta name="description" content="Free and open-source REST API providing comprehensive information about colleges across India. Built with Next.js, featuring random college lookup, alphabetical filtering, and complete college listings." />
                 <meta name="keywords" content="College API, Indian Colleges Database, Education API, Next.js API, REST API, College Information, India Colleges, Free API, Open Source API, College Search, Educational Institutions" />
