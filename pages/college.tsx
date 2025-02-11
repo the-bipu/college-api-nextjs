@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 
 interface CollegeProps {
     _id: string;
@@ -126,8 +127,13 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
                 <link rel="canonical" href="https://college-api-nextjs.vercel.app/college" />
             </Head>
 
-            <div className='flex flex-col items-center justify-center py-24'>
-                <div className='flex flex-col w-10/12 h-full '>
+            <div className='flex flex-col items-center justify-center pb-24 pt-10'>
+                <div className='md:w-10/12 w-11/12 h-auto flex flex-row items-center justify-between mb-10'>
+                    <div className='font-bold text-2xl'>College API</div>
+                    <Link href='/' className='uppercase font-semibold'>Back to Home</Link>
+                </div>
+
+                <div className='flex flex-col md:w-10/12 w-11/12 h-full '>
 
                     <h1 className='mb-2 font-semibold'>Add Colleges</h1>
                     <div className='flex flex-row gap-2 pb-8 w-full h-auto'>
