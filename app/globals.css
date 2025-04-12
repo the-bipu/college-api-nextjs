@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -95,4 +97,9 @@
   .button-56 {
     padding: 0.25em 0.75em;
   }
+}
+
+.Courier {
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 600;
 }

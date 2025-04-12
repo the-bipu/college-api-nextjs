@@ -5,18 +5,18 @@ import React from 'react'
 const Index = () => {
 
     const college = {
-        collegeCode: "zulekha-nursing-college-mangalore-mangalore-karnataka",
-        collegeName: "Zulekha Nursing College,Mangalore - MANGALORE - Karnataka",
+        collegeCode: "random-college-code",
+        collegeName: "Random College Code",
     };
 
     const collegeList = [
         {
-            collegeCode: "zulekha-nursing-college-mangalore-mangalore-karnataka",
-            collegeName: "Zulekha Nursing College,Mangalore - MANGALORE - Karnataka",
+            collegeCode: "random-college-code",
+            collegeName: "Random College Code",
         },
         {
-            collegeCode: "zenith-institute-of-science-&-technology-orissa",
-            collegeName: "Zenith Institute of Science & Technology - Orissa",
+            collegeCode: "another-random-college-code",
+            collegeName: "Another Random College Code",
         }
     ];
 
@@ -68,7 +68,7 @@ const Index = () => {
                             >{process.env.NEXT_PUBLIC_BASE_URL}/api/random</span>
                         </div>
                         <p className="text-[#888] font-semibold mb-2">Example Response:</p>
-                        <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] flex flex-row gap-4 space-mono">
+                        <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] flex flex-row gap-4 Courier">
                             {JSON.stringify(college, null, 2)}
                         </pre>
                     </div>
@@ -87,7 +87,7 @@ const Index = () => {
                             >{process.env.NEXT_PUBLIC_BASE_URL}/api/colleges?letter=z</span>
                         </div>
                         <p className="text-[#888] font-semibold mb-2">Example Response:</p>
-                        <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] flex flex-row gap-4 space-mono">
+                        <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] flex flex-row gap-4 Courier">
                             {JSON.stringify(collegeList, null, 2)}
                         </pre>
                     </div>
@@ -106,7 +106,7 @@ const Index = () => {
                             >{process.env.NEXT_PUBLIC_BASE_URL}/api/college</span>
                         </div>
                         <p className="text-[#888] font-semibold mb-2">Example Response:</p>
-                        <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] flex flex-row gap-4 space-mono">
+                        <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] flex flex-row gap-4 Courier">
                             {JSON.stringify(collegeList, null, 2)}
                         </pre>
                     </div>
