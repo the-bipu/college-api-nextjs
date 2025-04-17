@@ -17,8 +17,8 @@ interface CollegePageProps {
 
 const College: React.FC<CollegePageProps> = ({ colleges }) => {
     const [collegeName, setCollegeName] = useState('');
-    const [editingCollege, setEditingCollege] = useState<CollegeProps | null>(null);
     const [collegeList, setCollegeList] = useState<CollegeProps[]>(colleges);
+    const [copiedId, setCopiedId] = useState<string | null>(null);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCollegeName(e.target.value);
@@ -39,7 +39,7 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
             if (response.ok) {
                 const newColleges: CollegeProps[] = await response.json();
                 setCollegeList([...collegeList, ...newColleges]);
-                setCollegeName(''); // Clear input field after adding
+                setCollegeName('');
             } else {
                 console.error('Failed to add college');
             }
@@ -48,59 +48,16 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
         }
     };
 
-    const handleEditCollege = async () => {
-        if (!collegeName.trim() || !editingCollege) return;
+    const handleCopyUrl = async (collegeCode: string, collegeId: string) => {
+        const url = `https://college-api-nextjs.vercel.app/college/${collegeCode}`;
 
         try {
-            const response = await fetch(`/api/college`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    oldCollegeName: editingCollege.collegeName,
-                    newCollegeName: collegeName,
-                }),
-            });
-
-            if (response.ok) {
-                const updatedCollege: CollegeProps = await response.json();
-                setCollegeList(collegeList.map(college =>
-                    college._id === editingCollege._id ? updatedCollege : college
-                ));
-                setCollegeName('');
-                setEditingCollege(null);
-            } else {
-                console.error('Failed to edit college');
-            }
+            await navigator.clipboard.writeText(url);
+            setCopiedId(collegeId);
+            setTimeout(() => setCopiedId(null), 2000);
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Failed to copy:', error);
         }
-    };
-
-    const handleDeleteCollege = async (collegeId: string) => {
-        try {
-            const response = await fetch(`/api/college`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ collegeCode: collegeList.find(c => c._id === collegeId)?.collegeCode }),
-            });
-
-            if (response.ok) {
-                setCollegeList(collegeList.filter(college => college._id !== collegeId));
-            } else {
-                console.error('Failed to delete college');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
-
-    const startEditing = (college: CollegeProps) => {
-        setEditingCollege(college);
-        setCollegeName(college.collegeName);
     };
 
     return (
@@ -141,22 +98,14 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
                             className='h-10 md:w-9/12 w-full'
                             value={collegeName}
                             onChange={handleInputChange}
+                            placeholder="Enter college name"
                         />
-                        {editingCollege ? (
-                            <Button
-                                className='h-10 md:w-3/12 w-full'
-                                onClick={handleEditCollege}
-                            >
-                                Save
-                            </Button>
-                        ) : (
-                            <Button
-                                className='h-10 md:w-3/12 w-full'
-                                onClick={handleAddCollege}
-                            >
-                                Add New
-                            </Button>
-                        )}
+                        <Button
+                            className='h-10 md:w-3/12 w-full'
+                            onClick={handleAddCollege}
+                        >
+                            Add New
+                        </Button>
                     </div>
 
                     <h1 className='mb-2 font-semibold'>Colleges</h1>
@@ -164,43 +113,36 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
                         <ul className='bg-[#e3e3e3] rounded border border-[#b8b8b8] p-4 flex flex-col gap-4'>
                             {collegeList.map((college) => (
                                 <li key={college._id} className='flex flex-row justify-between items-center'>
-
                                     <div className='flex flex-col'>
-                                        <span className='capitalize'>{college.collegeName}</span>
-                                        <span>({college.collegeCode})</span>
+                                        <span className='capitalize text-base font-semibold Courier'>{college.collegeName}</span>
                                     </div>
 
-                                    <div className='flex gap-4'>
-                                        <button className="text-sm button-56" role="button" onClick={() => startEditing(college)}>
-                                            <span className="text">Edit</span>
-                                        </button>
-                                        <button className="text-sm button-56" role="button" onClick={() => handleDeleteCollege(college._id)}>
-                                            <span className="text">Delete</span>
-                                        </button>
-                                    </div>
-
+                                    <button
+                                        className="text-sm button-56"
+                                        role="button"
+                                        onClick={() => handleCopyUrl(college.collegeCode, college._id)}
+                                    >
+                                        {copiedId === college._id ? 'Copied!' : 'Copy URL'}
+                                    </button>
                                 </li>
                             ))}
                         </ul>
                     ) : (
                         <ul className='bg-[#e3e3e3] rounded border border-[#b8b8b8] p-4 flex flex-col gap-4'>
-                            {dummyList.map((college: any) => (
+                            {dummyList.map((college) => (
                                 <li key={college._id} className='flex flex-row justify-between items-center'>
-
                                     <div className='flex flex-col'>
                                         <span className='capitalize'>{college.collegeName}</span>
                                         <span>({college.collegeCode})</span>
                                     </div>
 
-                                    <div className='flex gap-4'>
-                                        <button className="text-sm button-56" role="button" onClick={() => startEditing(college)}>
-                                            <span className="text">Edit</span>
-                                        </button>
-                                        <button className="text-sm button-56" role="button" onClick={() => handleDeleteCollege(college._id)}>
-                                            <span className="text">Delete</span>
-                                        </button>
-                                    </div>
-
+                                    <button
+                                        className="text-sm button-56"
+                                        role="button"
+                                        onClick={() => handleCopyUrl(college.collegeCode, college._id)}
+                                    >
+                                        {copiedId === college._id ? 'Copied!' : 'Copy URL'}
+                                    </button>
                                 </li>
                             ))}
                         </ul>
