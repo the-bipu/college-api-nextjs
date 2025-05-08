@@ -12,13 +12,18 @@ interface CollegeProps {
 
 interface CollegePageProps {
     colleges: CollegeProps[];
+    initialLetter: string;
 }
 
-const College: React.FC<CollegePageProps> = ({ colleges }) => {
+const College: React.FC<CollegePageProps> = ({ colleges, initialLetter }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [collegeList, setCollegeList] = useState<CollegeProps[]>(colleges);
     const [filteredColleges, setFilteredColleges] = useState<CollegeProps[]>(colleges);
     const [copiedId, setCopiedId] = useState<string | null>(null);
+    const [selectedLetter, setSelectedLetter] = useState<string>(initialLetter);
+    const [loading, setLoading] = useState(false);
+
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
     useEffect(() => {
         if (!searchQuery.trim()) {
@@ -35,6 +40,23 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
+    };
+
+    const handleLetterClick = async (letter: string) => {
+        setLoading(true);
+        setSelectedLetter(letter);
+        setSearchQuery('');
+
+        try {
+            const res = await fetch(`/api/colleges?letter=${letter}`);
+            const data: CollegeProps[] = await res.json();
+            setCollegeList(data);
+            setFilteredColleges(data);
+        } catch (error) {
+            console.error('Failed to fetch colleges:', error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleCopyUrl = async (collegeCode: string, collegeId: string) => {
@@ -81,6 +103,22 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
 
                 <div className='flex flex-col md:w-10/12 w-11/12 h-full '>
 
+                    {/* Alphabet Filter Buttons */}
+                    <h1 className='mb-2 font-semibold'>Filter by Letter</h1>
+                    <div className='flex flex-wrap gap-2 pb-8 w-full h-auto'>
+                        {alphabet.map((letter) => (
+                            <button
+                                key={letter}
+                                className={`text-sm button-56 ${selectedLetter === letter ? 'bg-blue-500 text-white' : ''}`}
+                                role="button"
+                                onClick={() => handleLetterClick(letter)}
+                                disabled={loading}
+                            >
+                                {letter.toUpperCase()}
+                            </button>
+                        ))}
+                    </div>
+
                     <h1 className='mb-2 font-semibold'>Search Colleges</h1>
                     <div className='flex flex-row gap-2 pb-8 w-full h-auto'>
                         <Input
@@ -93,8 +131,13 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
 
                     <h1 className='mb-2 font-semibold'>
                         Colleges {searchQuery && `(${filteredColleges.length} results)`}
+                        {!searchQuery && ` - Letter ${selectedLetter.toUpperCase()} (${filteredColleges.length} results)`}
                     </h1>
-                    {filteredColleges.length > 0 ? (
+                    {loading ? (
+                        <div className='bg-[#e3e3e3] rounded border border-[#b8b8b8] p-4 text-center text-gray-600'>
+                            Loading...
+                        </div>
+                    ) : filteredColleges.length > 0 ? (
                         <ul className='bg-[#e3e3e3] rounded border border-[#b8b8b8] p-4 flex flex-col gap-4'>
                             {filteredColleges.map((college) => (
                                 <li key={college._id} className='flex flex-row justify-between items-center'>
@@ -126,11 +169,15 @@ const College: React.FC<CollegePageProps> = ({ colleges }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/college`);
+    const defaultLetter = 'z';
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/colleges?letter=${defaultLetter}`);
     const colleges: CollegeProps[] = await res.json();
 
     return {
-        props: { colleges },
+        props: { 
+            colleges,
+            initialLetter: defaultLetter
+        },
     };
 };
 
