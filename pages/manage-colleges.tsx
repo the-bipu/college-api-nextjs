@@ -130,7 +130,24 @@ const ManageCollege: React.FC<CollegePageProps> = ({ colleges }) => {
             <div className='flex flex-col items-center justify-center pb-24 pt-10'>
                 <div className='md:w-10/12 w-11/12 h-auto flex flex-row items-center justify-between mb-10'>
                     <div className='font-bold text-2xl'>College API</div>
-                    <Link href='/' className='uppercase font-semibold'>Back to Home</Link>
+                    <div className='flex flex-row gap-4'>
+                        <Link href='/'>
+                            <button
+                                className="text-sm button-56"
+                                role="button"
+                            >
+                                Back to Home
+                            </button>
+                        </Link>
+                        <Link href='/college'>
+                            <button
+                                className="text-sm button-56"
+                                role="button"
+                            >
+                                Colleges
+                            </button>
+                        </Link>
+                    </div>
                 </div>
 
                 <div className='flex flex-col md:w-10/12 w-11/12 h-full '>

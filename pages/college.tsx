@@ -98,12 +98,28 @@ const College: React.FC<CollegePageProps> = ({ colleges, initialLetter }) => {
             <div className='flex flex-col items-center justify-center pb-24 pt-10'>
                 <div className='md:w-10/12 w-11/12 h-auto flex flex-row items-center justify-between mb-10'>
                     <div className='font-bold text-2xl'>College API</div>
-                    <Link href='/' className='uppercase font-semibold'>Back to Home</Link>
+                    <div className='flex flex-row gap-4'>
+                        <Link href='/'>
+                            <button
+                                className="text-sm button-56"
+                                role="button"
+                            >
+                                Back to Home
+                            </button>
+                        </Link>
+                        <Link href='/manage-colleges'>
+                            <button
+                                className="text-sm button-56"
+                                role="button"
+                            >
+                                Manage Colleges
+                            </button>
+                        </Link>
+                    </div>
                 </div>
 
                 <div className='flex flex-col md:w-10/12 w-11/12 h-full '>
 
-                    {/* Alphabet Filter Buttons */}
                     <h1 className='mb-2 font-semibold'>Filter by Letter</h1>
                     <div className='flex flex-wrap gap-2 pb-8 w-full h-auto'>
                         {alphabet.map((letter) => (
@@ -174,7 +190,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     const colleges: CollegeProps[] = await res.json();
 
     return {
-        props: { 
+        props: {
             colleges,
             initialLetter: defaultLetter
         },
