@@ -5,7 +5,8 @@ import { College } from '@/models/College.js'
 export async function GET() {
     try {
         await connectMongo();
-        const mainData = await College.find();
+
+        const mainData = await College.find({}, { collegeCode: 1, collegeName: 1, _id: 0 });
         return NextResponse.json(mainData);
     } catch (error) {
         console.error(error);
@@ -13,7 +14,6 @@ export async function GET() {
     }
 }
 
-// Utility function for generating college code
 const generateCollegeCode = (name) => {
     return name
         .replace(/,\s*/g, '-')      // Replace comma followed by spaces with a dash
@@ -44,7 +44,12 @@ export async function POST(request) {
 
         const savedColleges = await College.insertMany(collegeEntries);
 
-        return NextResponse.json(savedColleges, { status: 201 });
+        const cleanedResponse = savedColleges.map(({ collegeCode, collegeName }) => ({
+            collegeCode,
+            collegeName
+        }));
+
+        return NextResponse.json(cleanedResponse, { status: 201 });
     } catch (error) {
         console.error(error);
         return NextResponse.json({ error: 'Server error' }, { status: 500 });
@@ -74,7 +79,8 @@ export async function PUT(request) {
             return NextResponse.json({ error: 'College not found' }, { status: 404 });
         }
 
-        return NextResponse.json(updatedCollege, { status: 200 });
+        const { collegeCode, collegeName } = updatedCollege;
+        return NextResponse.json({ collegeCode, collegeName }, { status: 200 });
     } catch (error) {
         console.error(error);
         return NextResponse.json({ error: 'Server error' }, { status: 500 });

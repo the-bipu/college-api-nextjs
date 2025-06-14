@@ -16,9 +16,10 @@ export async function GET(req) {
             );
         }
 
-        const colleges = await College.find({
-            collegeName: { $regex: `^${firstLetter}`, $options: 'i' },
-        });
+        const colleges = await College.find(
+            { collegeName: { $regex: `^${firstLetter}`, $options: 'i' } },
+            { collegeCode: 1, collegeName: 1, _id: 0 }
+        );
 
         if (colleges.length === 0) {
             return NextResponse.json(

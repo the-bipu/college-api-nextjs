@@ -12,7 +12,8 @@ export async function GET() {
             return NextResponse.json({ error: 'No colleges found' }, { status: 404 });
         }
 
-        return NextResponse.json(randomCollege[0], { status: 200 });
+        const { collegeCode, collegeName } = randomCollege[0];
+        return NextResponse.json({ collegeCode, collegeName }, { status: 200 });
     } catch (error) {
         console.error(error);
         return NextResponse.json({ error: 'Server error' }, { status: 500 });
