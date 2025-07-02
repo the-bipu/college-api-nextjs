@@ -1,8 +1,12 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import React from 'react'
+import React, { useState } from 'react'
 
 const Index = () => {
+    const [randomResult, setRandomResult] = useState<any>(null);
+    const [letterResult, setLetterResult] = useState<any>(null);
+    const [allCollegesResult, setAllCollegesResult] = useState<any>(null);
+    const [loading, setLoading] = useState({ random: false, letter: false, all: false });
 
     const college = {
         collegeCode: "random-college-code",
@@ -19,6 +23,45 @@ const Index = () => {
             collegeName: "Another Random College Code",
         }
     ];
+
+    const testRandomRoute = async () => {
+        setLoading({ ...loading, random: true });
+        try {
+            const res = await fetch('/api/random');
+            const data = await res.json();
+            setRandomResult(data);
+        } catch (error) {
+            setRandomResult({ error: 'Failed to fetch data' });
+        } finally {
+            setLoading({ ...loading, random: false });
+        }
+    };
+
+    const testLetterRoute = async () => {
+        setLoading({ ...loading, letter: true });
+        try {
+            const res = await fetch('/api/colleges?letter=z');
+            const data = await res.json();
+            setLetterResult(data);
+        } catch (error) {
+            setLetterResult({ error: 'Failed to fetch data' });
+        } finally {
+            setLoading({ ...loading, letter: false });
+        }
+    };
+
+    const testAllCollegesRoute = async () => {
+        setLoading({ ...loading, all: true });
+        try {
+            const res = await fetch('/api/college');
+            const data = await res.json();
+            setAllCollegesResult(data);
+        } catch (error) {
+            setAllCollegesResult({ error: 'Failed to fetch data' });
+        } finally {
+            setLoading({ ...loading, all: false });
+        }
+    };
 
     return (
         <React.Fragment>
@@ -54,6 +97,7 @@ const Index = () => {
                         <p className="text-lg">Welcome to the College API by the-bipu. Here we've tried to list all the colleges of India with this API.</p>
                     </div>
 
+                    {/* Random College Endpoint */}
                     <div className="flex flex-col bg-[#fff] p-6 rounded">
                         <h3 className="text-[#ff7f50] text-2xl font-bold mb-3">Get a Random College.</h3>
                         <p className="text-[#888] mb-2">
@@ -71,8 +115,24 @@ const Index = () => {
                         <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] flex flex-row gap-4 space-mono">
                             {JSON.stringify(college, null, 2)}
                         </pre>
+                        <div className='w-auto flex flex-col gap-2'>
+                            <button
+                                className="w-40 my-4 text-sm button-56"
+                                role="button"
+                                onClick={testRandomRoute}
+                                disabled={loading.random}
+                            >
+                                {loading.random ? 'Loading...' : 'Test Route'}
+                            </button>
+                            {randomResult && (
+                                <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] space-mono max-h-96 overflow-auto">
+                                    {JSON.stringify(randomResult, null, 2)}
+                                </pre>
+                            )}
+                        </div>
                     </div>
 
+                    {/* Letter Filter Endpoint */}
                     <div className="flex flex-col bg-[#fff] p-6 rounded">
                         <h3 className="text-[#ff7f50] text-2xl font-bold mb-3">Get Colleges with First Letter.</h3>
                         <p className="text-[#888] mb-2">
@@ -90,8 +150,24 @@ const Index = () => {
                         <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] flex flex-row gap-4 space-mono">
                             {JSON.stringify(collegeList, null, 2)}
                         </pre>
+                        <div className='w-auto flex flex-col gap-2'>
+                            <button
+                                className="w-40 my-4 text-sm button-56"
+                                role="button"
+                                onClick={testLetterRoute}
+                                disabled={loading.letter}
+                            >
+                                {loading.letter ? 'Loading...' : 'Test Route'}
+                            </button>
+                            {letterResult && (
+                                <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] space-mono max-h-96 overflow-auto">
+                                    {JSON.stringify(letterResult, null, 2)}
+                                </pre>
+                            )}
+                        </div>
                     </div>
 
+                    {/* All Colleges Endpoint */}
                     <div className="flex flex-col bg-[#fff] p-6 rounded">
                         <h3 className="text-[#ff7f50] text-2xl font-bold mb-3">Get all Colleges.</h3>
                         <p className="text-[#888] mb-2">
@@ -109,6 +185,21 @@ const Index = () => {
                         <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] flex flex-row gap-4 space-mono">
                             {JSON.stringify(collegeList, null, 2)}
                         </pre>
+                        <div className='w-auto flex flex-col gap-2'>
+                            <button
+                                className="w-40 my-4 text-sm button-56"
+                                role="button"
+                                onClick={testAllCollegesRoute}
+                                disabled={loading.all}
+                            >
+                                {loading.all ? 'Loading...' : 'Test Route'}
+                            </button>
+                            {allCollegesResult && (
+                                <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] space-mono max-h-96 overflow-auto">
+                                    {JSON.stringify(allCollegesResult, null, 2)}
+                                </pre>
+                            )}
+                        </div>
                     </div>
 
                     <div className='w-full h-auto flex flex-row items-center justify-between'>
