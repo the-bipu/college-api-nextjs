@@ -42,7 +42,9 @@ const Index = () => {
         try {
             const res = await fetch('/api/colleges?letter=z');
             const data = await res.json();
-            setLetterResult(data);
+
+            const limitedData = Array.isArray(data) ? data.slice(0, 3) : data;
+            setLetterResult(limitedData);
         } catch (error) {
             setLetterResult({ error: 'Failed to fetch data' });
         } finally {
@@ -55,7 +57,9 @@ const Index = () => {
         try {
             const res = await fetch('/api/college');
             const data = await res.json();
-            setAllCollegesResult(data);
+
+            const limitedData = Array.isArray(data) ? data.slice(0, 3) : data;
+            setAllCollegesResult(limitedData);
         } catch (error) {
             setAllCollegesResult({ error: 'Failed to fetch data' });
         } finally {
@@ -91,13 +95,28 @@ const Index = () => {
             <div className="w-full h-auto flex items-center justify-center p-5 bg-[#f2f2f2]">
                 <div className="flex flex-col w-full h-auto gap-4">
                     <div className="flex flex-col gap-1">
-                        <div className="text-3xl font-bold text-[#333333] space-mono">
-                            College API Documentation
+                        <div className="flex flex-row items-center justify-between">
+                            <div className="text-3xl font-bold text-[#333333] space-mono">
+                                College API Documentation
+                            </div>
+                            {(randomResult || letterResult || allCollegesResult) && (
+                                <button
+                                    className="text-sm button-56"
+                                    role="button"
+                                    onClick={() => {
+                                        setRandomResult(null);
+                                        setLetterResult(null);
+                                        setAllCollegesResult(null);
+                                    }}
+                                >
+                                    Clear All Results
+                                </button>
+                            )}
                         </div>
+
                         <p className="text-lg">Welcome to the College API by the-bipu. Here we've tried to list all the colleges of India with this API.</p>
                     </div>
 
-                    {/* Random College Endpoint */}
                     <div className="flex flex-col bg-[#fff] p-6 rounded">
                         <h3 className="text-[#ff7f50] text-2xl font-bold mb-3">Get a Random College.</h3>
                         <p className="text-[#888] mb-2">
@@ -132,7 +151,6 @@ const Index = () => {
                         </div>
                     </div>
 
-                    {/* Letter Filter Endpoint */}
                     <div className="flex flex-col bg-[#fff] p-6 rounded">
                         <h3 className="text-[#ff7f50] text-2xl font-bold mb-3">Get Colleges with First Letter.</h3>
                         <p className="text-[#888] mb-2">
@@ -162,12 +180,12 @@ const Index = () => {
                             {letterResult && (
                                 <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] space-mono max-h-96 overflow-auto">
                                     {JSON.stringify(letterResult, null, 2)}
+                                    {"\n\n"}// Note: You'll only get 3 results for testing purposes. The actual API returns all matching colleges.
                                 </pre>
                             )}
                         </div>
                     </div>
 
-                    {/* All Colleges Endpoint */}
                     <div className="flex flex-col bg-[#fff] p-6 rounded">
                         <h3 className="text-[#ff7f50] text-2xl font-bold mb-3">Get all Colleges.</h3>
                         <p className="text-[#888] mb-2">
@@ -197,6 +215,7 @@ const Index = () => {
                             {allCollegesResult && (
                                 <pre className="bg-[#f2f2f2] rounded px-4 py-2 border border-[#ddd] space-mono max-h-96 overflow-auto">
                                     {JSON.stringify(allCollegesResult, null, 2)}
+                                    {"\n\n"}// Note: You'll only get 3 results for testing purposes. The actual API returns all colleges.
                                 </pre>
                             )}
                         </div>
